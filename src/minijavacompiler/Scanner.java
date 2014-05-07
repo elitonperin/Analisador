@@ -40,7 +40,7 @@ public class Scanner
         }
         catch(FileNotFoundException e)
         {
-            System.err.println("Arquivo não encontrado");
+            System.err.println("Arquivo nï¿½o encontrado");
         }
         catch(IOException e)
         {
