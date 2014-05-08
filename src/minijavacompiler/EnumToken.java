@@ -47,6 +47,17 @@ public enum EnumToken
     PRINT,
     DCONCHETES,     // [
     ECONCHETES,     // ]
-    EPARENTESES,    // )
-    DPARENTESES     // (
+    APAREN,    // )
+    FPAREN,     // (
+    WHILE,
+    MAIN,
+    VOID,
+    STATIC,
+    TRUE,
+    FALSE,
+    BOOLEAN,
+    SOPRINTLN,
+    THIS,
+    PUBLIC
+    
 }
