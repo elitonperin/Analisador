@@ -7,7 +7,7 @@ public class Token
 {
     public EnumToken name;
     public EnumToken attribute;
-    public TSEntry tsPtr;
+    public STEntry tsPtr;
     
     public Token(EnumToken name)
     {

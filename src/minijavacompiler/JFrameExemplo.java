@@ -36,18 +36,7 @@ public class JFrameExemplo extends JFrame{
 	
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(310, 360);
-		this.setVisible(true);
-		
-		addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				buttonConfirmaActionPerformed(e);	
-			}
-
+		this.setVisible(true);	
+	
 	}
-	
-	
-	
 }
