@@ -5,7 +5,8 @@
  */
 package minijavacompiler;
 /**
- * @author bianca 
+ * @author Eliton, usando um esqueleto do programada cedido pela 
+ * 			 Prof. Bianca 
  *
  */
 public class MiniJavaCompiler {
@@ -15,7 +16,11 @@ public class MiniJavaCompiler {
      */
     public static void main(String[] args) 
     {
-    	JFrameExemplo janela = new JFrameExemplo();
+    	// JFrameExemplo janela = new JFrameExemplo();
+    	
+    	SwingContainerDemo janela = new SwingContainerDemo();
+    	
+    	janela.showJFrameDemo();
     	
         //Scanner scan = new Scanner("teste.mj");       
     }	
