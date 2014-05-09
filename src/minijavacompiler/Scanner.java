@@ -47,6 +47,36 @@ public class Scanner
             System.err.println("Erro na leitura do arquivo");
         }
     }
+    
+    public Scanner( String inputFileName)
+    {
+        File inputFile = new File(inputFileName);       
+        
+        try
+        {
+            FileReader fr = new FileReader(inputFile);
+            
+            int size = (int)inputFile.length();            
+            char[] buffer = new char[size];
+        
+            fr.read(buffer, 0, size);
+            
+            input = new String(buffer);
+            
+            inputIt = new StringCharacterIterator(input);
+            
+            //System.out.println(input);
+        }
+        catch(FileNotFoundException e)
+        {
+            System.err.println("Arquivo não encontrado");
+        }
+        catch(IOException e)
+        {
+            System.err.println("Erro na leitura do arquivo");
+        }
+    }
+    
     public Token nextToken()
     {
         Token tok = new Token(EnumToken.UNDEF);               
@@ -59,103 +89,282 @@ public class Scanner
         if (inputIt.getIndex() >= inputIt.getEndIndex())            
             tok.name = EnumToken.EOF;
         else{
+
             while(state != -1){
                 switch(state){
                     case 0:
-                        if(Character.isLetter(inputIt.current()))
-                            state = 2;
-                        else if(Character.isDigit(inputIt.current()))
-                            state = 2;
-                        else if(inputIt.current() == '+'){
-                            tok.name = EnumToken.MAIS;
-                            tok.attribute = EnumToken.MAIS;
-                            state = -1;
-                        }
-                        else if(inputIt.current() == '-'){
-                            tok.name = EnumToken.MENOS;
-                            tok.attribute = EnumToken.MENOS;
-                            state = -1;
-                        }
-                        else if(inputIt.current() == '*'){
-                            tok.name = EnumToken.VEZES;
-                            tok.attribute = EnumToken.VEZES;
-                            state = -1;
-                        }
-                        else if(inputIt.current() == '/'){
-                            tok.name = EnumToken.DIV;
-                            tok.attribute = EnumToken.DIV;
-                            state = -1;
-                        }
-                        else if(inputIt.current() == '('){
-                            tok.name = EnumToken.APAREN;
-                            tok.attribute = EnumToken.APAREN;
-                            state = -1;
-                        }
-                        else if(inputIt.current() == ')'){
-                            tok.name = EnumToken.FPAREN;
-                            tok.attribute = EnumToken.FPAREN;
-                            state = -1;
-                        }
-                        
+                        if (inputIt.current() == '<')
+                            state = 4;
+                        else if (inputIt.current() == '=')
+                            state = 7;
+                        else if (inputIt.current() == '>')
+                            state = 10;
+                        else if (inputIt.current() == '[')
+                            state = 0;
+                        else if (inputIt.current() == ']')
+                            state = 0;
+                        else if (inputIt.current() == '}')
+                            state = 0;
+                        else if (inputIt.current() == '{')
+                            state = 0;
+                        else if (inputIt.current() == '(')
+                            state = 0;
+                        else if (inputIt.current() == ')')
+                            state = 0;
+                        else if (inputIt.current() == '/')
+                            state = 0;
+                        else if (inputIt.current() == '%')
+                            state = 0;
+                        else if (inputIt.current() == '-')
+                            state = 0;
+                        else if (inputIt.current() == '+')
+                            state = 0;
+                        else if (inputIt.current() == '*')
+                            state = 0;
+                        else if (inputIt.current() == ',')
+                            state = 0;
+                        else if (inputIt.current() == ';')
+                            state = 0;
+                        else if (inputIt.current() == '.')
+                            state = 0;
+                        else if (Character.isLetter(inputIt.current()))
+                            state = 1;
+                        else if (inputIt.current() == '_')
+                            state = 1;
+                        else if (Character.isDigit(inputIt.current()))
+                            state = 13;  
+                        else if (Character.isWhitespace(inputIt.current()))
+                            state = 3;
+                            
                         begin = inputIt.getIndex();
                         inputIt.next();
+                        
                         break;
                     case 1:
+                        while (Character.isLetterOrDigit(inputIt.current()))
+                              inputIt.next();            
+                          state = 2;
+                          inputIt.next();
+                        break;
+                    case 2:
+                        if (inputIt.current() != StringCharacterIterator.DONE)
+                                inputIt.previous();
+                            end = inputIt.getIndex();
+                            lexema = new String(input.substring(begin, end));
+
+                            if (lexema.equals("if"))                    
+                                tok.name = EnumToken.IF;
+                            else if (lexema.equals("else"))
+                                tok.name = EnumToken.ELSE;
+                            else if (lexema.equals("class"))
+                                tok.name = EnumToken.CLASS;
+                            else if (lexema.equals("extends"))
+                                tok.name = EnumToken.EXTENDS ;
+                            else if (lexema.equals("int"))
+                                tok.name = EnumToken.INT ;
+                            else if (lexema.equals("double"))
+                                tok.name = EnumToken.DOUBLE ;
+                            else if (lexema.equals("string"))
+                                tok.name = EnumToken.STRING ;
+                            else if (lexema.equals("constructor"))
+                                tok.name = EnumToken.CONSTRUCTOR;
+                            else if (lexema.equals("break"))
+                                tok.name = EnumToken.BREAK ;
+                            else if (lexema.equals("print"))
+                                tok.name = EnumToken.PRINT ;
+                            else if (lexema.equals("read"))
+                                tok.name = EnumToken.READ ;
+                            else if (lexema.equals("for"))
+                                tok.name = EnumToken.FOR;
+                            else if (lexema.equals("super"))
+                                tok.name = EnumToken.SUPER ;
+                            else if (lexema.equals("return"))
+                                tok.name = EnumToken.RETURN;
+                            else if (lexema.equals("new"))
+                                tok.name = EnumToken.NEW ;
+                            else
+                                tok.name  = EnumToken.ID;
+
+                            state = -1;
+                        break;
+                    case 3:
+                        while(Character.isWhitespace(inputIt.current()))
+                            inputIt.next();
+                        
+                        state = 0;
+                        break;
+                    case 4:
+                        if (inputIt.current() == '=')
+                            state = 5;
+                        else
+                            state = 6;
+                        inputIt.next(); 
+                        break;
+                    case 5:
+                        tok.name = EnumToken.LE;
+                        tok.attribute = EnumToken.LE;
+                        state = -1;
+                        break;
+                    case 6:
+                        tok.name = EnumToken.LT;
+                        tok.attribute = EnumToken.LT;
+                        state = -1;
+                        break;
+                    case 7:
+                        if(inputIt.current() == '=')
+                            state = 8;
+                        else
+                            state = 9;
+                        
+                        inputIt.next();
+                        break;
+                    case 8:
+                        tok.name = EnumToken.EQ;
+                        tok.attribute = EnumToken.EQ;
+                        state = -1;
+                        break;
+                    case 9:
+                        tok.name = EnumToken.IGUAL;
+                        tok.attribute = EnumToken.IGUAL;
+                        state = -1;
+                        break;
+                    case 10:
+                        if (inputIt.current() == '=')
+                            state = 11;
+                        else
+                            state = 12;
+                        inputIt.next();  
+                        break;
+                    case 11:
+                        tok.name = EnumToken.GE;
+                        tok.attribute = EnumToken.GE;
+                        state = -1;                    
+                        break;
+                    case 12:
+                        tok.name = EnumToken.GT;
+                        tok.attribute = EnumToken.GT;
+                        state = -1;                    
+                        break;
+                    case 13:
                         while (Character.isDigit(inputIt.current()))
                             inputIt.next();                    
 
                         if (inputIt.current() == '.')
-                            state = 2;
+                            state = 14; 
                         else if (inputIt.current() == 'E')
-                            state = 3;
+                            state = 16; 
                         else
-                            state = 4;
+                            state = 20; 
 
                         inputIt.next();
                         
                         break;
-                    case 2:
+                    case 14:
                         if (Character.isDigit(inputIt.current()))
                         {
-                            state = 13;
+                            state = 15; 
                             inputIt.next();
                         }
                         else
                         {
                             System.out.println("Erro no reconhecimento de float");
                             state = -1;
-                        }                
+                        }   
                         break;
-                    case 3:
+                    case 15:
+                        while (Character.isDigit(inputIt.current()))
+                            inputIt.next();                    
+
+                        if (inputIt.current() == 'E')
+                            state = 16; 
+                        else
+                            state = 21; 
+
+                        inputIt.next();
+                        break;
+                    case 16:
                         if (inputIt.current() == '+' || inputIt.current() == '-')
-                            state = 15; //17
+                        state = 17; 
                         else if (Character.isDigit(inputIt.current()))
-                            state = 16; //18
+                            state = 18; 
+                        else
+                        {
+                            System.out.println("Erro no reconhecimento de float");
+                            state = -1;
+                        }  
+                        break;
+                    case 17:
+                        if (Character.isDigit(inputIt.current()))
+                            state = 18;
                         else
                         {
                             System.out.println("Erro no reconhecimento de float");
                             state = -1;
                         }
+
                         inputIt.next();
-                        
                         break;
-                    case 4:
-                                              
+                    case 18:
+                        while (Character.isDigit(inputIt.current()))
+                            inputIt.next();                    
+
+                        state = 19;
+                        inputIt.next();
 
                         break;
-                    case 5:
+                    case 19:
+                        if (inputIt.current() != StringCharacterIterator.DONE)
+                            inputIt.previous();
+
+                        end = inputIt.getIndex();                    
+                        lexema = new String(input.substring(begin, end));
+
+                        tok.name = EnumToken.DOUBLE_LITERAL;
+                        tok.attribute = EnumToken.DOUBLE_LITERAL;
+
+                        state = -1;
                         break;
-                    case 6:
+                    case 20:
+                        if (inputIt.current() != StringCharacterIterator.DONE)
+                            inputIt.previous();
+
+                        end = inputIt.getIndex();                    
+                        lexema = new String(input.substring(begin, end));
+
+                        tok.name = EnumToken.INTEGER_LITERAL;
+                        tok.attribute = EnumToken.INTEGER_LITERAL;                        
+
+                        state = -1;
+
                         break;
-                    case 7:
+                    case 21:
+                        if (inputIt.current() != StringCharacterIterator.DONE)
+                            inputIt.previous();
+
+                        end = inputIt.getIndex();                    
+                        lexema = new String(input.substring(begin, end));
+
+                        tok.name = EnumToken.DOUBLE_LITERAL;
+                        tok.attribute = EnumToken.DOUBLE_LITERAL;
+
+                        state = -1;
                         break;
-                    case 8:
+                    case 22:
                         break;
-                    case 9:
+                    case 23:
                         break;
-                    case 10:
+                    case 24:
                         break;
-                    
+                    case 25:
+                        break;
+                    case 26:
+                        break;
+                    case 27:
+                        break;
+                    case 28:
+                        break;
+                    case 29:
+                        break;
                 }
             }
         }

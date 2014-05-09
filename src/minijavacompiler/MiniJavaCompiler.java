@@ -17,12 +17,13 @@ public class MiniJavaCompiler {
     public static void main(String[] args) 
     {
     	// JFrameExemplo janela = new JFrameExemplo();
+//    	
+//    	SwingContainerDemo janela = new SwingContainerDemo();
+//    	
+//    	janela.showJFrameDemo();
     	
-    	SwingContainerDemo janela = new SwingContainerDemo();
-    	
-    	janela.showJFrameDemo();
-    	
-        //Scanner scan = new Scanner("teste.mj");       
+        Scanner scan = new Scanner("teste.mj");
+        
     }	
     
 }

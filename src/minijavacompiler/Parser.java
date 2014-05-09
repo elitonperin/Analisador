@@ -67,12 +67,15 @@ public class Parser
         return false;
     }
     
-    /*
+    /** 1 - Program -> ClassList
+     * 
+     *  2
+     * 
      * Método para o símbolo inicial da gramática
      */    
     private void program() throws Exception
     {
-        mainClass();
+        //mainClass();
         
         while (lToken.name == EnumToken.CLASS) 
             classDeclaration();
@@ -81,26 +84,218 @@ public class Parser
         
     }
     
-    private void mainClass() throws Exception
-    {
-        //TODO
-    }
-    
+    /** 3
+     * 
+     * @throws Exception
+     */
     private void classDeclaration() throws Exception
     {
         //TODO
+    	classID();
+    	
+    	classBody();
     }
     
-    private void varDeclaration()
+    /** Auxiliar para tirar a fatoração class id
+     * 
+     * @throws Exception
+     */
+    private void classID() throws Exception {
+		// TODO Auto-generated method stub
+    	match(EnumToken.CLASS);
+    	match(EnumToken.ID);
+    	
+    	if(lToken.name == EnumToken.EXTENDS){
+    		advance();
+    		match(EnumToken.ID);
+    	}
+		classBody();	
+	}
+
+    /** 4 - 5 - 9 - 11
+     * 
+     * @throws Exception
+     */
+	private void classBody() throws Exception {
+		// TODO Auto-generated method stub
+		
+		match(EnumToken.ACHAVES);
+		
+		
+		while(lToken.name == EnumToken.TYPE)
+			varDeclaration();
+		
+		while(lToken.name == EnumToken.CONSTRUCTOR)
+			contrutorDecl();
+		
+		while(lToken.name == EnumToken.TYPE)
+			methodDeclaration();
+		
+		match(EnumToken.FCHAVES);
+		
+		
+		
+	}
+	
+	/**  10
+	 * 
+	 * @throws Exception
+	 */
+	private void contrutorDecl() throws Exception {
+		// TODO Auto-generated method stub
+		advance();
+		
+		methodyBody();
+	}
+
+	/** 13 - 14
+	 * 
+	 */
+	private void methodyBody() throws Exception {
+		// TODO Auto-generated method stub
+		match(EnumToken.APAREN);
+		
+		while(lToken.name == EnumToken.TYPE)
+			ParamList();
+		
+		match(EnumToken.FPAREN);
+		
+		match(EnumToken.ACHAVES);
+		
+		Statements();
+		
+		match(EnumToken.FCHAVES);
+		
+	}
+	
+	/** 17
+	 * 
+	 */
+	private void Statements() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/** 15
+	 *  ParamList -> ParamList , Param | Param
+	 *  
+	 *  ParamList -> Param ParamListLine
+	 *  
+	 *  ParamListLine -> , Param ParamListLine | vazio
+	 *  
+	 * @throws Exception
+	 */
+	private void ParamList() throws Exception {
+		// TODO Auto-generated method stub
+		Param();
+		
+		ParamListLine();
+		
+	}
+	private void ParamListLine() throws Exception {
+		// TODO Auto-generated method stub
+		
+		while(lToken.name == EnumToken.VIRGULA){
+			advance();
+			Param();
+		}		
+	}
+
+	/** 16
+	 * 
+	 * @throws Exception
+	 */
+	private void Param() throws Exception {
+		// TODO Auto-generated method stub
+		Type();
+		
+		if(lToken.name == EnumToken.ACHAVES){
+			advance();
+			match(EnumToken.FCHAVES);
+		}
+		
+		match(EnumToken.ID);
+	}
+	
+	/** 6
+	 * 
+	 * @throws Exception
+	 */
+	private void varDeclaration() throws Exception
+    {
+        //TODO		
+		Type();
+		
+		if(lToken.name == EnumToken.ACONCHETES){
+			advance();
+			match(EnumToken.FCONCHETES);
+		}
+		
+		match(EnumToken.ID);
+		
+		varDeclarationOption();
+		
+		match(EnumToken.PONTOVIRGULA);
+    }
+	
+    /** 7
+     * 
+     * @throws Exception
+     */
+    private void varDeclarationOption() throws Exception {
+		// TODO Auto-generated method stub
+    	while(lToken.name == EnumToken.VIRGULA){
+    		advance();
+    		match(EnumToken.ID);
+    		varDeclarationOption();
+    	}
+    	
+    	
+	}
+    
+    /** 8
+     * 
+     * @throws Exception
+     */
+	private void Type() throws Exception {
+		// TODO Auto-generated method stub
+		if(lToken.name == EnumToken.INT){
+			advance();
+		}
+		else if(lToken.name == EnumToken.DOUBLE){
+			advance();
+		}
+		else if(lToken.name == EnumToken.STRING){
+			advance();
+		}else{
+			match(EnumToken.ID);
+		}
+		
+	}
+	
+	/** 12
+	 * @throws Exception 
+	 * 
+	 */
+	private void methodDeclaration() throws Exception
     {
         //TODO
+		Type();
+		
+		if(lToken.name == EnumToken.ACONCHETES){
+			advance();
+			match(EnumToken.FCONCHETES);
+		}
+		
+		match(EnumToken.ID);
+		
+		methodyBody();		
     }
     
-    private void methodDeclaration()
-    {
-        //TODO
-    }
-    
+	/** 18
+	 * 
+	 * @throws Exception
+	 */
     private void statement() throws Exception
     {
         //TODO

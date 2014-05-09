@@ -39,16 +39,16 @@ public enum EnumToken
     CONSTRUCTOR,
     CLASS,
     EXTENDS,
-    DCHAVES,       // {
-    ECHAVES,       // }
+    ACHAVES,       // {
+    FCHAVES,       // }
     RETURN,     
     SUPER,
     READ,
     PRINT,
-    DCONCHETES,     // [
-    ECONCHETES,     // ]
-    APAREN,    // )
-    FPAREN,     // (
+    ACONCHETES,     // [
+    FCONCHETES,     // ]
+    FPAREN,    // )
+    APAREN,     // (
     WHILE,
     MAIN,
     VOID,
